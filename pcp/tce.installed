@@ -1,0 +1,27 @@
+#!/bin/sh
+# Copy the Bluetooth plugin into the Lyrion cache.
+# Does not restart Lyrion and does not start playback.
+
+SRC=/usr/local/share/lms-bluetooth/Bluetooth
+if [ ! -d "$SRC" ]; then
+	exit 0
+fi
+
+TCE=/etc/sysconfig/tcedir
+if [ ! -d "$TCE" ]; then
+	TCE=/mnt/mmcblk0p2/tce
+fi
+if [ ! -d "$TCE" ]; then
+	exit 0
+fi
+
+install_into() {
+	dest="$1"
+	mkdir -p "$dest" || return 0
+	tar -C "$SRC" -cf - . | tar -C "$dest" -xf -
+	chown -R tc:staff "$dest" 2>/dev/null
+}
+
+install_into "$TCE/slimserver/Cache/Plugins/Bluetooth"
+install_into "$TCE/slimserver/Cache/InstalledPlugins/Plugins/Bluetooth"
+exit 0

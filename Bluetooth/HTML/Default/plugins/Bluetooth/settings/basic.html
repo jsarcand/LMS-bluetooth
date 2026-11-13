@@ -1,0 +1,18 @@
+[% PROCESS settings/header.html %]
+<div style="font:16px/1.45 -apple-system,BlinkMacSystemFont,sans-serif;padding:12px 4px">
+	<p>Bluetooth s’ouvre dans Material.</p>
+	<p><button type="button" onclick="btOpen()">Ouvrir</button></p>
+</div>
+<script>
+function btOpen() {
+	try {
+		var top = window.parent || window;
+		if (top.bus) {
+			top.bus.$emit('dlg.open', 'bluetooth');
+			top.bus.$emit('iframe-close');
+		}
+	} catch (e) {}
+}
+btOpen();
+</script>
+[% PROCESS settings/footer.html %]

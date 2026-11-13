@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<extension>
+	<id>9c4e2b17-6a58-4f0d-8c31-2e7b5a9d41f6</id>
+	<name>PLUGIN_BLUETOOTH</name>
+	<module>Plugins::Bluetooth::Plugin</module>
+	<version>0.2.0</version>
+	<description>PLUGIN_BLUETOOTH_DESC</description>
+	<creator>JS Arcand assisted by Grok</creator>
+	<email>info@jsarcand.com</email>
+	<defaultState>enabled</defaultState>
+	<category>hardware</category>
+	<optionsURL>plugins/Bluetooth/settings/basic.html</optionsURL>
+	<targetApplication>
+		<id>Lyrion Music Server</id>
+		<minVersion>8.0</minVersion>
+		<maxVersion>*</maxVersion>
+	</targetApplication>
+</extension>

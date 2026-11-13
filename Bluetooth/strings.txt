@@ -1,0 +1,163 @@
+PLUGIN_BLUETOOTH
+	EN	Bluetooth
+	FR	Bluetooth
+
+PLUGIN_BLUETOOTH_DESC
+	EN	Registry of Bluetooth devices, their player and their drift. The bridge is told afterwards. Nothing starts playing.
+	FR	Registre des dispositifs Bluetooth, de leur platine et du drift. Le bridge est prévenu ensuite. Rien ne se met à jouer.
+
+PLUGIN_BLUETOOTH_SAVED
+	EN	Saved in Lyrion.
+	FR	Enregistré dans Lyrion.
+
+PLUGIN_BLUETOOTH_EMPTY
+	EN	No device yet.
+	FR	Aucun dispositif.
+
+PLUGIN_BLUETOOTH_UNLINKED
+	EN	no player
+	FR	sans platine
+
+PLUGIN_BLUETOOTH_REMOVE
+	EN	Remove
+	FR	Retirer
+
+PLUGIN_BLUETOOTH_DETACH
+	EN	Unlink
+	FR	Retirer le lien
+
+PLUGIN_BLUETOOTH_BRIDGES
+	EN	Bridges
+	FR	Bridges
+
+PLUGIN_BLUETOOTH_DEVICES
+	EN	Devices
+	FR	Dispositifs
+
+PLUGIN_BLUETOOTH_LINKS
+	EN	Players
+	FR	Platines
+
+PLUGIN_BLUETOOTH_ADD_BRIDGE
+	EN	Add a bridge
+	FR	Ajouter un bridge
+
+PLUGIN_BLUETOOTH_ADD_DEVICE
+	EN	Add a device
+	FR	Ajouter un dispositif
+
+PLUGIN_BLUETOOTH_ATTACH
+	EN	Link to a player
+	FR	Associer à une platine
+
+PLUGIN_BLUETOOTH_DRIFT
+	EN	Drift (ms)
+	FR	Drift (ms)
+
+PLUGIN_BLUETOOTH_DRIFT_DESC
+	EN	Extra shift for this player. For an input or an output, the buffer is 200 ms plus this value, held between 60 and 800 ms. A sub or a remote keeps the number and does not apply it.
+	FR	Décalage de cette platine. Pour une entrée ou une sortie, le tampon vaut 200 ms plus cette valeur, entre 60 et 800 ms. Un caisson ou une télécommande garde le nombre sans l’appliquer.
+
+PLUGIN_BLUETOOTH_ROLE_INPUT
+	EN	Audio input
+	FR	Entrée audio
+
+PLUGIN_BLUETOOTH_ROLE_OUTPUT
+	EN	Audio output
+	FR	Sortie audio
+
+PLUGIN_BLUETOOTH_ROLE_REMOTE
+	EN	Remote
+	FR	Télécommande
+
+PLUGIN_BLUETOOTH_ROLE_SUB
+	EN	Subwoofer
+	FR	Caisson
+
+PLUGIN_BLUETOOTH_APART
+	EN	apart from the group
+	FR	à part du groupe
+
+PLUGIN_BLUETOOTH_ERR
+	EN	That change was refused.
+	FR	Ce changement a été refusé.
+
+PLUGIN_BLUETOOTH_ERR_ID
+	EN	The identifier is missing.
+	FR	L’identifiant manque.
+
+PLUGIN_BLUETOOTH_ERR_HOST
+	EN	The bridge address is missing.
+	FR	L’adresse du bridge manque.
+
+PLUGIN_BLUETOOTH_ERR_PORT
+	EN	The port is not valid.
+	FR	Le port n’est pas valide.
+
+PLUGIN_BLUETOOTH_ERR_ROLE
+	EN	Choose input, output, remote or subwoofer.
+	FR	Choisir une entrée, une sortie, une télécommande ou un caisson.
+
+PLUGIN_BLUETOOTH_ERR_PLAYER
+	EN	Choose a player.
+	FR	Choisir une platine.
+
+PLUGIN_BLUETOOTH_ERR_DRIFT
+	EN	The drift must be a whole number of milliseconds.
+	FR	Le drift doit être un nombre entier de millisecondes.
+
+PLUGIN_BLUETOOTH_ERR_DUP
+	EN	This device is already listed.
+	FR	Ce dispositif est déjà inscrit.
+
+PLUGIN_BLUETOOTH_ERR_DEVICE
+	EN	This device is unknown.
+	FR	Ce dispositif est inconnu.
+
+PLUGIN_BLUETOOTH_ERR_LINK
+	EN	This device is not linked to that player.
+	FR	Ce dispositif n’est pas associé à cette platine.
+
+PLUGIN_BLUETOOTH_ERR_BRIDGE
+	EN	This bridge is unknown.
+	FR	Ce bridge est inconnu.
+
+PLUGIN_BLUETOOTH_ERR_BRIDGE_USED
+	EN	This bridge still has devices.
+	FR	Ce bridge a encore des dispositifs.
+
+PLUGIN_BLUETOOTH_NOTE
+	EN	Each device is linked to a player. Drift is the extra delay for that player.
+	FR	Chaque appareil est lié à une platine. Le drift est le retard ajouté pour cette platine.
+
+PLUGIN_BLUETOOTH_SEARCH
+	EN	Look for devices
+	FR	Chercher des appareils
+
+PLUGIN_BLUETOOTH_SEARCHING
+	EN	Looking. Reopen this page in a moment.
+	FR	Recherche en cours. Rouvrez cette page dans un instant.
+
+PLUGIN_BLUETOOTH_FOUND
+	EN	Nearby
+	FR	À proximité
+
+PLUGIN_BLUETOOTH_ALIGNED
+	EN	In time
+	FR	Aligné
+
+PLUGIN_BLUETOOTH_LATE
+	EN	ms later
+	FR	ms plus tard
+
+PLUGIN_BLUETOOTH_EARLY
+	EN	ms earlier
+	FR	ms plus tôt
+
+PLUGIN_BLUETOOTH_UNCLASSIFIED
+	EN	Unclassified
+	FR	À classer
+
+PLUGIN_BLUETOOTH_BRIDGE_SETUP
+	EN	Bridge
+	FR	Bridge

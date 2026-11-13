@@ -1,0 +1,61 @@
+# Bluetooth
+
+Lyrion plugin. It keeps a registry of Bluetooth devices, the player they belong to, and their drift. The bridge is told afterwards. Nothing starts playing.
+
+Version 0.2.0.
+
+[Lire en français](#français)
+
+## Lyrion repository
+
+In Settings → Plugins → additional repositories, add:
+
+https://raw.githubusercontent.com/jsarcand/LMS-bluetooth/main/repo.xml
+
+Lyrion downloads `Bluetooth-0.2.0.zip` and checks its SHA1. The archive contains a `Bluetooth/` folder with `install.xml` at the plugin root.
+
+The player menu can read the page with `bluetooth page noscan:1`. That returns the known cards and does not scan. The Bluetooth menu itself still scans. Identity lookups and subwoofer reads run in another process, so they do not freeze Lyrion.
+
+## piCorePlayer
+
+piCorePlayer is Tiny Core. The package format is a `.tcz` squashfs, not an `.ipk`.
+
+The extension is `pcp/lms-bluetooth.tcz` (gzip, 16K blocks, the same as the other extensions on piCorePlayer 11). Copy these three files into the tce optional directory (`/etc/sysconfig/tcedir/optional`):
+
+- `lms-bluetooth.tcz`
+- `lms-bluetooth.tcz.md5.txt`
+- `lms-bluetooth.tcz.dep`
+
+Add `lms-bluetooth.tcz` to `onboot.lst` if it should load at every boot. Load it with `tce-load -i lms-bluetooth`, or reboot. The extension copies the plugin into both Lyrion cache trees. It does not restart Lyrion and it does not start playback. Restart Lyrion once so the new files are loaded.
+
+`lms-bluetooth.tcz.dep` asks for `slimserver.tcz`, `python3.11.tcz`, `python3.11-bleak.tcz`, `dbus-python3.11.tcz`, `pcp-bt.tcz`, and `bluez-alsa.tcz`.
+
+## Français
+
+Plugin Lyrion. Il tient le registre des dispositifs Bluetooth, de leur platine et du drift. Le bridge est prévenu ensuite. Rien ne se met à jouer.
+
+Version 0.2.0.
+
+### Dépôt Lyrion
+
+Dans Réglages → Greffons → dépôts supplémentaires :
+
+https://raw.githubusercontent.com/jsarcand/LMS-bluetooth/main/repo.xml
+
+Lyrion télécharge `Bluetooth-0.2.0.zip` et vérifie son SHA1. L’archive contient un dossier `Bluetooth/` avec `install.xml` à la racine du plugin.
+
+Le menu de la platine peut lire la page avec `bluetooth page noscan:1`. Cela renvoie les cartes déjà connues, sans balayage. Le menu Bluetooth lui-même balaie encore. Les lectures d’identité et du caisson tournent dans un autre processus, donc elles ne figent pas Lyrion.
+
+### piCorePlayer
+
+piCorePlayer est du Tiny Core. Le paquet est un squashfs `.tcz`, pas un `.ipk`.
+
+L’extension est `pcp/lms-bluetooth.tcz` (gzip, blocs de 16K, comme les autres extensions de piCorePlayer 11). Copier ces trois fichiers dans le dossier optional de tce (`/etc/sysconfig/tcedir/optional`) :
+
+- `lms-bluetooth.tcz`
+- `lms-bluetooth.tcz.md5.txt`
+- `lms-bluetooth.tcz.dep`
+
+Ajouter `lms-bluetooth.tcz` à `onboot.lst` si l’extension doit se charger à chaque démarrage. La charger avec `tce-load -i lms-bluetooth`, ou redémarrer. L’extension copie le plugin dans les deux arbres de cache de Lyrion. Elle ne relance pas Lyrion et ne démarre aucune lecture. Relancer Lyrion une fois pour prendre les nouveaux fichiers.
+
+`lms-bluetooth.tcz.dep` demande `slimserver.tcz`, `python3.11.tcz`, `python3.11-bleak.tcz`, `dbus-python3.11.tcz`, `pcp-bt.tcz` et `bluez-alsa.tcz`.

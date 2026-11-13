@@ -1,0 +1,12 @@
+Title:          lms-bluetooth.tcz
+Description:    Lyrion Bluetooth registry for piCorePlayer
+Version:        0.2.0
+Author:         JS Arcand
+Original-site:  https://github.com/jsarcand/LMS-bluetooth
+Copying-policy: All rights reserved
+Size:           36K
+Extension_by:   jsarcand
+Tags:           lms bluetooth lyrion picoreplayer
+Comments:       Copies the plugin into the Lyrion cache. Does not restart Lyrion and does not start playback. Restart Lyrion once to load the new files.
+Change-log:     2026/11/13 First publication
+Current:        2026/11/13 First publication (0.2.0)

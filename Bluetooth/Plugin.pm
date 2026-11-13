@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use utf8;
 
-use base qw(Slim::Plugin::Base);
+use base qw(Slim::Plugin::OPMLBased);
 
 use JSON::XS::VersionOneAndTwo qw(encode_json decode_json);
 use Slim::Control::Request;
@@ -49,7 +49,14 @@ sub initPlugin {
 		links   => [],
 	});
 
-	$class->SUPER::initPlugin(@_);
+	$class->SUPER::initPlugin(
+		tag    => 'bluetooth',
+		menu   => 'extras',
+		weight => 85,
+		type   => 'link',
+		feed   => \&_extrasFeed,
+		is_app => 0,
+	);
 	Slim::Utils::Log->setLogLevelForCategory('plugin.bluetooth', 'INFO');
 	require Slim::Utils::Timers;
 	# No scan at startup. A scan runs only while the Bluetooth menu is open.
@@ -123,11 +130,6 @@ sub initPlugin {
 
 	Slim::Utils::Timers::setTimer(undef, time() + 1, \&_register_scene_modules);
 
-	if (main::WEBUI) {
-		require Plugins::Bluetooth::Settings;
-		Plugins::Bluetooth::Settings->new;
-	}
-
 	# WaveInput leaves arecord running after a Bluetooth input is stopped.
 	Slim::Control::Request::subscribe(\&_onPlaylistEvent, [['playlist'], ['stop', 'pause', 'clear']]);
 	Slim::Control::Request::subscribe(\&_onMixerVolume, [['mixer'], ['volume']]);
@@ -145,10 +147,12 @@ sub shutdownPlugin {
 }
 
 sub webPages {
+	my $class = shift;
 	if (main::WEBUI) {
 		require Plugins::Bluetooth::Settings;
 		Plugins::Bluetooth::Settings->new;
 	}
+	$class->SUPER::webPages();
 }
 
 sub state {
@@ -1136,6 +1140,194 @@ sub _cmdSubSet {
 		$request->addResult('value', $settings->{$setting});
 	}
 	$request->setStatusDone();
+}
+
+# Extras menu. Reads the registry only: no scan, no bluetoothctl, no sub read.
+sub _extrasFeed {
+	my ($client, $callback) = @_;
+	my $player_id = ($client && $client->can('id')) ? $client->id : '';
+	my $items = _extrasItems($player_id);
+	$callback->({ items => $items });
+}
+
+sub _extrasItems {
+	my ($player_id) = @_;
+	my $state = state();
+	my %names;
+	for my $player (@{ players() }) {
+		$names{lc $player->{id}} = $player->{name};
+	}
+	my $cards = Plugins::Bluetooth::Registry::cards($state, \%names);
+	_mark_active($cards, $player_id);
+	my $menu = Plugins::Bluetooth::Registry::player_menu($cards, $player_id);
+	my @items;
+	for my $row (@{ $menu->{play} || [] }) {
+		my $name = $row->{name};
+		$name .= ' — ' . Slim::Utils::Strings::string('PLUGIN_BLUETOOTH_NOW_PLAYING') if $row->{active};
+		my $id = $row->{id};
+		my $for = $player_id;
+		push @items, {
+			name => $name,
+			type => 'text',
+			url  => sub {
+				my ($cb_client, $cb) = @_;
+				_extrasPlay($cb_client, $for, $id, $cb);
+			},
+		};
+	}
+	my @settings;
+	for my $row (@{ $menu->{settings} || [] }) {
+		push @settings, @{ _extrasSettingItems($row) };
+	}
+	if (@settings) {
+		push @items, {
+			name  => Slim::Utils::Strings::string('PLUGIN_BLUETOOTH_PLAYER_SETTINGS'),
+			items => \@settings,
+		};
+	}
+	if (!@items) {
+		push @items, {
+			name => Slim::Utils::Strings::string('PLUGIN_BLUETOOTH_EXTRAS_EMPTY'),
+			type => 'text',
+		};
+	}
+	return \@items;
+}
+
+sub _extrasPlay {
+	my ($client, $player_id, $id, $callback) = @_;
+	my $player = $client;
+	if ((!$player || !$player->can('id')) && $player_id) {
+		$player = eval { Slim::Player::Client::getClient($player_id) };
+	}
+	my $text = Slim::Utils::Strings::string('PLUGIN_BLUETOOTH_EXTRAS_EMPTY');
+	if ($player && $player->can('id')) {
+		my $request = eval {
+			Slim::Control::Request::executeRequest($player, ['bluetooth', 'input', 'use', $id]);
+		};
+		if ($request && !$request->isStatusError) {
+			$text = Slim::Utils::Strings::string('PLUGIN_BLUETOOTH_NOW_PLAYING');
+		}
+		else {
+			$text = Slim::Utils::Strings::string('PLUGIN_BLUETOOTH_ERR');
+		}
+	}
+	$callback->({ items => [{ name => $text, type => 'text' }] });
+}
+
+sub _extrasSettingItems {
+	my ($row) = @_;
+	my $id = $row->{id};
+	my $player_id = $row->{player_id};
+	my $drift = $row->{drift_ms} || 0;
+	my @items = ({
+		name => ($row->{name} || $id) . ' — ' . $drift . ' ms',
+		type => 'text',
+	});
+	for my $delta (-10, 10) {
+		my $step = $delta;
+		my $label = $step < 0
+			? Slim::Utils::Strings::string('PLUGIN_BLUETOOTH_DRIFT_DOWN')
+			: Slim::Utils::Strings::string('PLUGIN_BLUETOOTH_DRIFT_UP');
+		push @items, {
+			name => ($row->{name} || $id) . ' — ' . $label,
+			type => 'text',
+			url  => sub {
+				my ($cb_client, $cb) = @_;
+				_extrasDrift($id, $player_id, $step, $cb);
+			},
+		};
+	}
+	if (($row->{role} || '') eq 'subwoofer') {
+		push @items, @{ _extrasSubItems($row) };
+	}
+	return \@items;
+}
+
+sub _extrasDrift {
+	my ($id, $player_id, $delta, $callback) = @_;
+	my $state = state();
+	my $current = 0;
+	for my $link (@{ $state->{links} || [] }) {
+		next unless lc($link->{device_id} || '') eq lc($id || '');
+		next unless lc($link->{player_id} || '') eq lc($player_id || '');
+		$current = $link->{drift_ms} || 0;
+		last;
+	}
+	my $result = apply_form({
+		bt_action => 'drift',
+		bt_id     => $id,
+		bt_player => $player_id,
+		bt_drift  => $current + $delta,
+	});
+	my $text = $result->{ok}
+		? Slim::Utils::Strings::string('PLUGIN_BLUETOOTH_SAVED')
+		: error_text($result->{error});
+	$callback->({ items => [{ name => $text, type => 'text' }] });
+}
+
+sub _extrasSubItems {
+	my ($row) = @_;
+	my $id = $row->{id};
+	my $settings = sub_settings_for($id);
+	my @items;
+	push @items, {
+		name => Slim::Utils::Strings::string('PLUGIN_BLUETOOTH_SUB_MODE') . ' — ' . ($settings->{mode} || ''),
+		type => 'text',
+	};
+	for my $mode (qw(music movie night)) {
+		my $value = $mode;
+		push @items, {
+			name => Slim::Utils::Strings::string('PLUGIN_BLUETOOTH_SUB_MODE') . ' — ' . $value,
+			type => 'text',
+			url  => sub {
+				my ($cb_client, $cb) = @_;
+				_extrasSub($id, 'mode', $value, $cb);
+			},
+		};
+	}
+	push @items, {
+		name => Slim::Utils::Strings::string('PLUGIN_BLUETOOTH_SUB_POLARITY') . ' — ' . ($settings->{polarity} || ''),
+		type => 'text',
+	};
+	for my $polarity (qw(normal inverted)) {
+		my $value = $polarity;
+		push @items, {
+			name => Slim::Utils::Strings::string('PLUGIN_BLUETOOTH_SUB_POLARITY') . ' — ' . $value,
+			type => 'text',
+			url  => sub {
+				my ($cb_client, $cb) = @_;
+				_extrasSub($id, 'polarity', $value, $cb);
+			},
+		};
+	}
+	my $level = $settings->{level};
+	$level = 0 unless defined $level;
+	push @items, {
+		name => Slim::Utils::Strings::string('PLUGIN_BLUETOOTH_SUB_LEVEL') . ' — ' . $level,
+		type => 'text',
+	};
+	for my $delta (-1, 1) {
+		my $step = $delta;
+		push @items, {
+			name => Slim::Utils::Strings::string('PLUGIN_BLUETOOTH_SUB_LEVEL') . ' ' . ($step > 0 ? '+1' : '−1'),
+			type => 'text',
+			url  => sub {
+				my ($cb_client, $cb) = @_;
+				_extrasSub($id, 'level', $level + $step, $cb);
+			},
+		};
+	}
+	return \@items;
+}
+
+sub _extrasSub {
+	my ($id, $setting, $value, $callback) = @_;
+	my $result = apply_sub_setting({ device => $id, setting => $setting, value => $value });
+	my $text = ($result->{ok})
+		? Slim::Utils::Strings::string('PLUGIN_BLUETOOTH_SAVED')
+		: error_text($result->{error});
+	$callback->({ items => [{ name => $text, type => 'text' }] });
 }
 
 sub _menu {

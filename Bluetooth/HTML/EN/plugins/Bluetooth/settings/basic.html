@@ -1,18 +1,95 @@
 [% PROCESS settings/header.html %]
-<div style="font:16px/1.45 -apple-system,BlinkMacSystemFont,sans-serif;padding:12px 4px">
-	<p>Bluetooth s’ouvre dans Material.</p>
-	<p><button type="button" onclick="btOpen()">Ouvrir</button></p>
+<div style="font:16px/1.45 -apple-system,BlinkMacSystemFont,sans-serif;padding:12px 4px;max-width:40em">
+	<p>[% "PLUGIN_BLUETOOTH_DESC" | string %]</p>
+	<p>[% "PLUGIN_BLUETOOTH_EXTRAS_HINT" | string %]</p>
+	[% IF bt_notice %]<p><strong>[% bt_notice | html %]</strong></p>[% END %]
+
+	<form method="get">
+		<input type="hidden" name="bt_action" value="scan">
+		<button type="submit">[% "PLUGIN_BLUETOOTH_SEARCH" | string %]</button>
+	</form>
+
+	<h3>[% "PLUGIN_BLUETOOTH_DEVICES" | string %]</h3>
+	[% IF bt_cards && bt_cards.size %]
+		[% FOREACH card = bt_cards %]
+			<p><strong>[% card.name | html %]</strong>
+				—
+				[% IF card.role == 'input' %][% "PLUGIN_BLUETOOTH_ROLE_INPUT" | string %]
+				[% ELSIF card.role == 'output' %][% "PLUGIN_BLUETOOTH_ROLE_OUTPUT" | string %]
+				[% ELSIF card.role == 'remote' %][% "PLUGIN_BLUETOOTH_ROLE_REMOTE" | string %]
+				[% ELSIF card.role == 'subwoofer' %][% "PLUGIN_BLUETOOTH_ROLE_SUB" | string %]
+				[% ELSE %][% card.role | html %][% END %]
+			</p>
+			[% FOREACH row = card.rows %]
+				<form method="get" style="margin:0 0 8px">
+					<input type="hidden" name="bt_action" value="drift">
+					<input type="hidden" name="bt_id" value="[% card.id | html %]">
+					<input type="hidden" name="bt_player" value="[% row.player_id | html %]">
+					<label>[% row.player_name | html %]
+						<input name="bt_drift" value="[% row.drift_ms | html %]" size="6"> ms
+					</label>
+					<button type="submit">[% "PLUGIN_BLUETOOTH_SAVED" | string %]</button>
+				</form>
+				<form method="get" style="margin:-4px 0 12px">
+					<input type="hidden" name="bt_action" value="detach">
+					<input type="hidden" name="bt_id" value="[% card.id | html %]">
+					<input type="hidden" name="bt_player" value="[% row.player_id | html %]">
+					<button type="submit">[% "PLUGIN_BLUETOOTH_DETACH" | string %]</button>
+				</form>
+			[% END %]
+			[% IF !card.rows.size %]
+				<p>[% "PLUGIN_BLUETOOTH_UNLINKED" | string %]</p>
+			[% END %]
+			<form method="get">
+				<input type="hidden" name="bt_action" value="remove_device">
+				<input type="hidden" name="bt_id" value="[% card.id | html %]">
+				<button type="submit">[% "PLUGIN_BLUETOOTH_REMOVE" | string %]</button>
+			</form>
+		[% END %]
+	[% ELSE %]
+		<p>[% "PLUGIN_BLUETOOTH_EMPTY" | string %]</p>
+	[% END %]
+
+	<h3>[% "PLUGIN_BLUETOOTH_ADD_DEVICE" | string %]</h3>
+	<form method="get">
+		<input type="hidden" name="bt_action" value="add_device">
+		<p><label>[% "PLUGIN_BLUETOOTH_DEVICES" | string %]
+			<input name="bt_name" size="24">
+		</label></p>
+		<p><label>Id <input name="bt_id" size="24"></label></p>
+		<p><label>[% "PLUGIN_BLUETOOTH_LINKS" | string %]
+			<select name="bt_role">
+				<option value="input">[% "PLUGIN_BLUETOOTH_ROLE_INPUT" | string %]</option>
+				<option value="output">[% "PLUGIN_BLUETOOTH_ROLE_OUTPUT" | string %]</option>
+				<option value="remote">[% "PLUGIN_BLUETOOTH_ROLE_REMOTE" | string %]</option>
+				<option value="subwoofer">[% "PLUGIN_BLUETOOTH_ROLE_SUB" | string %]</option>
+			</select>
+		</label></p>
+		<p><label>[% "PLUGIN_BLUETOOTH_ATTACH" | string %]
+			<select name="bt_player">
+				<option value=""></option>
+				[% FOREACH player = bt_players %]
+					<option value="[% player.id | html %]">[% player.name | html %]</option>
+				[% END %]
+			</select>
+		</label></p>
+		<p><label>[% "PLUGIN_BLUETOOTH_DRIFT" | string %]
+			<input name="bt_drift" value="0" size="6">
+		</label></p>
+		<button type="submit">[% "PLUGIN_BLUETOOTH_ADD_DEVICE" | string %]</button>
+	</form>
+
+	[% IF bt_found && bt_found.size %]
+		<h3>[% "PLUGIN_BLUETOOTH_FOUND" | string %]</h3>
+		[% FOREACH item = bt_found %]
+			<form method="get">
+				<input type="hidden" name="bt_action" value="add_device">
+				<input type="hidden" name="bt_id" value="[% item.id | html %]">
+				<input type="hidden" name="bt_name" value="[% item.name | html %]">
+				<input type="hidden" name="bt_role" value="[% item.role | html %]">
+				<button type="submit">[% item.name | html %]</button>
+			</form>
+		[% END %]
+	[% END %]
 </div>
-<script>
-function btOpen() {
-	try {
-		var top = window.parent || window;
-		if (top.bus) {
-			top.bus.$emit('dlg.open', 'bluetooth');
-			top.bus.$emit('iframe-close');
-		}
-	} catch (e) {}
-}
-btOpen();
-</script>
 [% PROCESS settings/footer.html %]

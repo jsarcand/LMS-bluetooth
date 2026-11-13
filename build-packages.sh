@@ -41,8 +41,8 @@ cat > "$ROOT/repo.xml" <<EOF
       <title lang="FR">Bluetooth</title>
       <desc lang="EN">Registry of Bluetooth devices, their player and their drift. The bridge is told afterwards. Nothing starts playing.</desc>
       <desc lang="FR">Registre des dispositifs Bluetooth, de leur platine et du drift. Le bridge est prévenu ensuite. Rien ne se met à jouer.</desc>
-      <changes lang="EN">$VER: The player menu can read Bluetooth without a scan. Identity and subwoofer reads run beside Lyrion and no longer freeze it.</changes>
-      <changes lang="FR">$VER : Le menu de la platine peut lire le Bluetooth sans balayage. L’identité et les lectures du caisson tournent à côté de Lyrion et ne le figent plus.</changes>
+      <changes lang="EN">$VER: Extras lists the inputs to play on this player, and groups that player's drift and sub settings. The plugin settings page works without Material.</changes>
+      <changes lang="FR">$VER : Extras liste les entrées à jouer sur cette platine, et regroupe le drift et les réglages du caisson. La page de réglages du plugin fonctionne sans Material.</changes>
       <category>hardware</category>
       <creator>JS Arcand assisted by Grok</creator>
       <email>info@jsarcand.com</email>

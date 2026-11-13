@@ -383,6 +383,41 @@ sub cards {
 	return [ map { $card{$_} } @order ];
 }
 
+# What one player sees outside the Material skin.
+# play: inputs linked to that player. settings: every linked device.
+sub player_menu {
+	my ($cards, $player_id) = @_;
+	my $want = lc($player_id || '');
+	my @play;
+	my @settings;
+	return { play => \@play, settings => \@settings } if $want eq '';
+	for my $card (@{ $cards || [] }) {
+		next unless $card && $card->{id};
+		my $linked;
+		for my $row (@{ $card->{rows} || [] }) {
+			next unless $row && lc($row->{player_id} || '') eq $want;
+			$linked = $row;
+			last;
+		}
+		next unless $linked;
+		if (($card->{role} || '') eq 'input') {
+			push @play, {
+				id     => $card->{id},
+				name   => $card->{name} || $card->{id},
+				active => $linked->{active} ? 1 : 0,
+			};
+		}
+		push @settings, {
+			id        => $card->{id},
+			name      => $card->{name} || $card->{id},
+			role      => $card->{role} || '',
+			drift_ms  => defined $linked->{drift_ms} ? $linked->{drift_ms} : 0,
+			player_id => $linked->{player_id},
+		};
+	}
+	return { play => \@play, settings => \@settings };
+}
+
 sub _lip_sync {
 	my ($role) = @_;
 	return $role eq 'input' || $role eq 'output';

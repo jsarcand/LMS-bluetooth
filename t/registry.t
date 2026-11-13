@@ -78,6 +78,32 @@ my $prows = Plugins::Bluetooth::Registry::rows_from_paired($paired);
 is($prows->[0]{name}, "Jean-Sebastien's Fire TV");
 is($prows->[0]{role}, 'input');
 is($prows->[0]{profile}, 'a2dp-input');
+
+my $menu_cards = [
+	{
+		id => 'firetv', name => 'Fire TV', role => 'input',
+		rows => [
+			{ player_id => 'AA:BB', drift_ms => 80, active => 1 },
+			{ player_id => 'cc:dd', drift_ms => 0 },
+		],
+	},
+	{
+		id => 'phones', name => 'Phones', role => 'output',
+		rows => [ { player_id => 'aa:bb', drift_ms => -20 } ],
+	},
+	{
+		id => 'other', name => 'Other', role => 'input',
+		rows => [ { player_id => 'ee:ff', drift_ms => 0 } ],
+	},
+];
+my $menu = Plugins::Bluetooth::Registry::player_menu($menu_cards, 'aa:bb');
+is(scalar @{ $menu->{play} }, 1);
+is($menu->{play}[0]{id}, 'firetv');
+is($menu->{play}[0]{active}, 1);
+is(scalar @{ $menu->{settings} }, 2);
+is($menu->{settings}[1]{role}, 'output');
+is($menu->{settings}[1]{drift_ms}, -20);
+is(scalar @{ Plugins::Bluetooth::Registry::player_menu($menu_cards, '')->{play} }, 0);
 my $pstate = { bridges => [], devices => [], links => [] };
 is(scalar @{ Plugins::Bluetooth::Registry::adopt_paired($pstate, $prows) }, 1);
 is($pstate->{devices}[0]{role}, 'input');

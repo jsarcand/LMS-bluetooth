@@ -3,7 +3,8 @@
 	<id>9c4e2b17-6a58-4f0d-8c31-2e7b5a9d41f6</id>
 	<name>PLUGIN_BLUETOOTH</name>
 	<module>Plugins::Bluetooth::Plugin</module>
-	<version>0.2.0</version>
+	<version>0.2.1</version>
+	<playerMenu>EXTRAS</playerMenu>
 	<description>PLUGIN_BLUETOOTH_DESC</description>
 	<creator>JS Arcand assisted by Grok</creator>
 	<email>info@jsarcand.com</email>

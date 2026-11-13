@@ -2,7 +2,7 @@
 
 Lyrion plugin. It keeps a registry of Bluetooth devices, the player they belong to, and their drift. The bridge is told afterwards. Nothing starts playing.
 
-Version 0.2.0.
+Version 0.2.1.
 
 [Lire en français](#français)
 
@@ -12,9 +12,11 @@ In Settings → Plugins → additional repositories, add:
 
 https://raw.githubusercontent.com/jsarcand/LMS-bluetooth/main/repo.xml
 
-Lyrion downloads `Bluetooth-0.2.0.zip` and checks its SHA1. The archive contains a `Bluetooth/` folder with `install.xml` at the plugin root.
+Lyrion downloads `Bluetooth-0.2.1.zip` and checks its SHA1. The archive contains a `Bluetooth/` folder with `install.xml` at the plugin root.
 
 The player menu can read the page with `bluetooth page noscan:1`. That returns the known cards and does not scan. The Bluetooth menu itself still scans. Identity lookups and subwoofer reads run in another process, so they do not freeze Lyrion.
+
+Extras → Bluetooth, on a player, lists the inputs linked to that player. Choosing one starts it. The same menu groups that player's drift and subwoofer settings. The plugin's own settings page edits the registry without Material.
 
 ## piCorePlayer
 
@@ -34,7 +36,7 @@ Add `lms-bluetooth.tcz` to `onboot.lst` if it should load at every boot. Load it
 
 Plugin Lyrion. Il tient le registre des dispositifs Bluetooth, de leur platine et du drift. Le bridge est prévenu ensuite. Rien ne se met à jouer.
 
-Version 0.2.0.
+Version 0.2.1.
 
 ### Dépôt Lyrion
 
@@ -42,9 +44,11 @@ Dans Réglages → Greffons → dépôts supplémentaires :
 
 https://raw.githubusercontent.com/jsarcand/LMS-bluetooth/main/repo.xml
 
-Lyrion télécharge `Bluetooth-0.2.0.zip` et vérifie son SHA1. L’archive contient un dossier `Bluetooth/` avec `install.xml` à la racine du plugin.
+Lyrion télécharge `Bluetooth-0.2.1.zip` et vérifie son SHA1. L’archive contient un dossier `Bluetooth/` avec `install.xml` à la racine du plugin.
 
 Le menu de la platine peut lire la page avec `bluetooth page noscan:1`. Cela renvoie les cartes déjà connues, sans balayage. Le menu Bluetooth lui-même balaie encore. Les lectures d’identité et du caisson tournent dans un autre processus, donc elles ne figent pas Lyrion.
+
+Extras → Bluetooth, sur une platine, liste les entrées liées à cette platine. L’appui en démarre une. Le même menu regroupe le drift et les réglages du caisson de cette platine. La page de réglages du plugin édite le registre sans Material.
 
 ### piCorePlayer
 

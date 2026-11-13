@@ -161,3 +161,39 @@ PLUGIN_BLUETOOTH_UNCLASSIFIED
 PLUGIN_BLUETOOTH_BRIDGE_SETUP
 	EN	Bridge
 	FR	Bridge
+
+PLUGIN_BLUETOOTH_NOW_PLAYING
+	EN	Playing
+	FR	En lecture
+
+PLUGIN_BLUETOOTH_PLAYER_SETTINGS
+	EN	Player settings
+	FR	Réglages de la platine
+
+PLUGIN_BLUETOOTH_EXTRAS_EMPTY
+	EN	No Bluetooth device is linked to this player.
+	FR	Aucun dispositif Bluetooth n’est lié à cette platine.
+
+PLUGIN_BLUETOOTH_EXTRAS_HINT
+	EN	To play an input, open Extras, then Bluetooth, on the player.
+	FR	Pour jouer une entrée, ouvrir Extras, puis Bluetooth, sur la platine.
+
+PLUGIN_BLUETOOTH_DRIFT_DOWN
+	EN	Drift −10 ms
+	FR	Drift −10 ms
+
+PLUGIN_BLUETOOTH_DRIFT_UP
+	EN	Drift +10 ms
+	FR	Drift +10 ms
+
+PLUGIN_BLUETOOTH_SUB_MODE
+	EN	Mode
+	FR	Mode
+
+PLUGIN_BLUETOOTH_SUB_POLARITY
+	EN	Polarity
+	FR	Polarité
+
+PLUGIN_BLUETOOTH_SUB_LEVEL
+	EN	Level
+	FR	Niveau

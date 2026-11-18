@@ -1,6 +1,9 @@
-# Bluetooth
+# LMS-Bluetooth
 
-Lyrion plugin. It keeps a registry of Bluetooth devices, the player they belong to, and their drift. The bridge is told afterwards. Nothing starts playing.
+This is both a lyrion plugin and a PiCorePlayer bridge that allows management, connection and allocation of bluetooth devices doscovered by the PcP computer.  It allows the virtual attribution of a bluetooth remote control to an audio endpoint, the automatic configuration of a bluetooth speaker as a Lyrion endpoint, the control of BluetoothLE subwoofers (Martin Logan / Paradigm / SVS (untested)) and low latency bluetooth audio transfer to any LMS endpoint resulting in synced A/V.  
+The bridge is controllable from
+within the Lyrion interface.
+Many such bridges can be run on the network and the Lyrion plugin will auto-detect these.
 
 Version 0.2.1.
 
@@ -19,8 +22,6 @@ The player menu can read the page with `bluetooth page noscan:1`. That returns t
 Extras → Bluetooth, on a player, lists the inputs linked to that player. Choosing one starts it. The same menu groups that player's drift and subwoofer settings. The plugin's own settings page edits the registry without Material.
 
 ## piCorePlayer
-
-piCorePlayer is Tiny Core. The package format is a `.tcz` squashfs, not an `.ipk`.
 
 The extension is `pcp/lms-bluetooth.tcz` (gzip, 16K blocks, the same as the other extensions on piCorePlayer 11). Copy these three files into the tce optional directory (`/etc/sysconfig/tcedir/optional`):
 
@@ -51,8 +52,6 @@ Le menu de la platine peut lire la page avec `bluetooth page noscan:1`. Cela ren
 Extras → Bluetooth, sur une platine, liste les entrées liées à cette platine. L’appui en démarre une. Le même menu regroupe le drift et les réglages du caisson de cette platine. La page de réglages du plugin édite le registre sans Material.
 
 ### piCorePlayer
-
-piCorePlayer est du Tiny Core. Le paquet est un squashfs `.tcz`, pas un `.ipk`.
 
 L’extension est `pcp/lms-bluetooth.tcz` (gzip, blocs de 16K, comme les autres extensions de piCorePlayer 11). Copier ces trois fichiers dans le dossier optional de tce (`/etc/sysconfig/tcedir/optional`) :
 

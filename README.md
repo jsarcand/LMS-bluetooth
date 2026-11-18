@@ -1,6 +1,6 @@
 # LMS-Bluetooth
 
-This is both a lyrion plugin and a PiCorePlayer bridge that allows management, connection and allocation of bluetooth devices doscovered by the PcP computer.  It allows the virtual attribution of a bluetooth remote control to an audio endpoint, the automatic configuration of a bluetooth speaker as a Lyrion endpoint, the control of BluetoothLE subwoofers (Martin Logan / Paradigm / SVS (untested)) and low latency bluetooth audio transfer to any LMS endpoint resulting in synced A/V.  
+This is both a lyrion plugin and a PiCorePlayer bridge that allows management, connection and allocation of bluetooth devices discovered by the PcP computer.  It allows the virtual attribution of a bluetooth remote control to an audio endpoint, the automatic configuration of a bluetooth speaker as a Lyrion endpoint, the control of BluetoothLE subwoofers (Martin Logan / Paradigm / SVS (untested)) and low latency bluetooth audio transfer to any LMS endpoint resulting in synced A/V.  
 The bridge is controllable from
 within the Lyrion interface.
 Many such bridges can be run on the network and the Lyrion plugin will auto-detect these.
